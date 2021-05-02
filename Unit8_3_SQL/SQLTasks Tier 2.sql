@@ -128,10 +128,12 @@ ORDER BY `Costs` DESC
 
 SELECT `Facility`, `Member Name`, `costs_per_slot` * `slots` AS 'Costs'
 FROM (SELECT `Facilities`.`name` AS 'Facility', `slots`,
-            CASE WHEN  `memid` = 0 THEN `guestcost` 
-                 ELSE `membercost` END AS 'costs_per_slot',
-            CASE WHEN  `memid` = 0 THEN `firstname`
-                 ELSE CONCAT(`firstname`, ' ', `surname`) END AS 'Member Name'
+             CASE WHEN  `memid` = 0 THEN `guestcost` 
+                  ELSE `membercost` 
+                  END AS 'costs_per_slot',
+             CASE WHEN  `memid` = 0 THEN `firstname`
+                  ELSE CONCAT(`firstname`, ' ', `surname`) 
+                  END AS 'Member Name'
       FROM `Bookings` 
       LEFT JOIN `Members`
         USING (`memid`)
@@ -154,7 +156,8 @@ The output of facility name and total revenue, sorted by revenue. Remember
 that there's a different cost for guests and members! */
 
 SELECT `Facilities`.`name` AS 'Facility',
-        SUM(CASE WHEN `Bookings`.`memid` = 0 THEN `Facilities`.`guestcost` * `Bookings`.`slots`
+        SUM(CASE WHEN `Bookings`.`memid` = 0 
+        	     THEN `Facilities`.`guestcost` * `Bookings`.`slots`
                  ELSE `Facilities`.`membercost`* `Bookings`.`slots` END) AS 'total_revenue'
 FROM `Bookings`
 LEFT JOIN `Members`
